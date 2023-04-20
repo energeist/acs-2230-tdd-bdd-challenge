@@ -7,15 +7,18 @@ const sayHello = () => {
 }
 
 const area = (w, h) => {
-  // should return the area
+  result = w*h
+  return (w < 0 || h < 0) ? null : result
 }
 
 const perimeter = (w, h) => {
-  // should return the perimeter
+  result = 2*w + 2*h
+  return (w < 0 || h < 0) ? null : result
 }
 
 const circleArea = r => {
-  // should return the area of the circle
+  result = Math.PI*(r**2)
+  return (r < 0 ? null : result)
 }
 
 // ========================================================
@@ -27,32 +30,58 @@ const circleArea = r => {
 
 const shoppingCart = []
 
-const clearCart = () => {
-  shoppingCart.length = 0
+const clearCart = (cart) => {
+  cart = []
+  return cart
 }
 
 const createItem = (name, price) => {
   return { name, price, quantity: 1 }
 }
 
-const getShoppingCart = () => {
-  // should return the current state of shopping cart
+const getShoppingCart = (cart) => {
+  return cart
 }
 
-const addItemToCart = (item) => {
-  // should add item to shopping cart
+const addItemToCart = (cart, item) => {
+  for (let i = 0; i < cart.length; i++) {
+    if (cart[i].name === item.name) {
+      cart[i].quantity += item.quantity;
+      return cart;
+    } 
+  }
+  cart.push(item);
+  return cart;
 }
 
-const getNumItemsInCart = () => {
-  // should return the total quantity of items in cart
+const getNumItemsInCart = (cart) => {
+  items = 0
+  cart.forEach(item => {
+    items += item.quantity;
+  });
+  return items;
 }
 
-const removeItemFromCart = (item) => {
-  // should remove item from shopping cart
+const removeItemFromCart = (cart, item) => {
+  for (let i = 0; i < cart.length; i++) {
+    if (cart[i].name === item.name) {
+      cart.splice(i, 1);
+      return cart;
+    }
+  }
+  return `${item} not found!`
+}
+
+const calcCartTotal = (cart) => {
+  total = 0
+  cart.forEach(item => {
+    total += item.quantity * item.price;
+  });
+  return total;
 }
 
 module.exports = {
   sayHello, area, perimeter, circleArea,
   clearCart, createItem, getShoppingCart, addItemToCart,
-  getNumItemsInCart, removeItemFromCart
+  getNumItemsInCart, removeItemFromCart, calcCartTotal
 }
