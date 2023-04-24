@@ -2,6 +2,7 @@ const mocha = require("mocha");
 const chai = require("chai");
 const utils = require("../utils");
 const expect = chai.expect;
+const should = chai.should()
 
 // ========================================================
 // NOTE: https://mochajs.org/#arrow-functions
@@ -30,11 +31,14 @@ it("should return the area of a rectangle when w && h > 0", function() {
   const area = utils.area(2,5);
   expect(area).to.be.a("number");
   expect(area).to.equal(10);
+  area.should.equal(10);
+  area.should.be.a("number");
 })
 
 it("should return null when w < 0", function() {
   const area = utils.area(-2,5);
   expect(area).to.be.null;
+  // area.should.be.null; // This doesn't work because area is returned as null, should can only be used on object.prototype.
 })
 
 it("should return null when h < 0", function() {
@@ -46,6 +50,7 @@ it("should return the perimeter of a rectangle when w && h > 0", function() {
   const perimeter = utils.perimeter(2,5);
   expect(perimeter).to.be.a("number");
   expect(perimeter).to.equal(14);
+  perimeter.should.equal(14);
 })
 
 it("should return null when w < 0", function() {
@@ -85,9 +90,13 @@ beforeEach((done) => {
 it("Should create a new (object) Item with name and price", function() {
   const item = utils.createItem("apple", 0.99);
   expect(item).to.be.a("object");
+  item.should.be.a("object");
   expect(item).to.have.property("name", "apple");
+  item.should.have.property("name", "apple");
   expect(item).to.have.property("price", 0.99);
+  item.should.have.property("price", 0.99);
   expect(item).to.have.property("quantity", 1);
+  item.should.have.property("quantity", 1);
 });
 
 it("Should return an array containing all items in cart", function() {
@@ -98,16 +107,18 @@ it("Should return an array containing all items in cart", function() {
   const cartItems = utils.getShoppingCart(cart);
   expect(cartItems).to.be.a("array");
   expect(cartItems.length).to.equal(2);
+  cartItems.should.have.lengthOf(2);
   expect(cartItems[0]).to.have.property("name", "apple");
   expect(cartItems[1]).to.have.property("name", "banana");
 });
 
 it("Should add a new item to the shopping cart", function() {
-  cart = []
+  cart = [];
+  cart.should.be.empty;
   const apple = utils.createItem("apple", 0.99);
   cart = utils.addItemToCart(cart, apple);
   cart = utils.addItemToCart(cart, apple);
-  expect(cart.length).to.equal(1);
+  expect(cart).to.have.lengthOf(1);
   expect(cart).to.be.a("array");
   expect(cart[0]).to.be.a("object");
   expect(cart[0]).to.have.property("name", "apple");
@@ -117,6 +128,7 @@ it("Should add a new item to the shopping cart", function() {
 
 it("Should return the number of items in the cart", function() {
   cart = [];
+  cart.should.be.empty;
   const apple = utils.createItem("apple", 0.99);
   const banana = utils.createItem("banana", 0.59);
   cart = utils.addItemToCart(cart, apple);
@@ -127,6 +139,13 @@ it("Should return the number of items in the cart", function() {
   expect(cart[0].quantity).to.equal(2);
   expect(cart[1].quantity).to.equal(1);
   expect(number).to.equal(3);
+  cart = utils.removeItemFromCart(cart, apple);
+  number = utils.getNumItemsInCart(cart);
+  number.should.equal(1);
+  cart = utils.removeItemFromCart(cart, banana);
+  number = utils.getNumItemsInCart(cart);
+  number.should.equal(0);
+  cart.should.be.empty;
 });
 
 it("Should remove items from cart", function() {
@@ -135,9 +154,10 @@ it("Should remove items from cart", function() {
     {"name": "apple", "price": 0.99, "quantity": 2},
     {"name": "banana", "price": 0.59, "quantity": 1}
   ];
-  cart = utils.removeItemFromCart(cart, apple)
+  cart.should.have.lengthOf(2);
+  cart = utils.removeItemFromCart(cart, apple);
   expect(cart).to.be.a("array");
-  expect(cart.length).to.equal(1);
+  expect(cart).to.have.lengthOf(1);
   expect(cart[0]).to.have.property("name", "banana");
   expect(cart[0]).to.have.property("price", 0.59);
   expect(cart[0]).to.have.property("quantity", 1);
